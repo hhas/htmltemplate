@@ -1,0 +1,4 @@
+include README LICENSE htmltemplate.py setup.py
+recursive-include doc *.css *.html
+recursive-include sample *.py *.md *.css *.html
+

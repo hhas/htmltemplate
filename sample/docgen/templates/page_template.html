@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+
+<title>htmltemplate | <span node="-con:title1">TITLE</span></title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css" media="all"><!--@import url(full.css);--></style>
+
+<!--[if !IE 7]>
+	<style type="text/css">
+		#wrap {display:table;height:100%}
+	</style>
+<![endif]-->
+
+</head>
+<body>
+
+<div id="wrap">
+
+	<div id="main">
+
+		<h1 node="con:title2">TITLE</h1>
+
+		<div class="navbar" node="con:topnav">
+			<a node="rep:link">LINK</a><span node="-sep:link"> | </span><a node="del:">LINK</a>
+		</div>
+
+		<div node="-con:content">CONTENT</div>
+	
+	</div>
+
+</div>
+
+<div id="footer">
+
+	<div class="navbar" node="con:bottomnav">
+		<a node="rep:link">LINK</a><span node="-sep:link"> | </span><a node="del:">LINK</a>
+	</div>
+
+	<p class="footer">© 2007-<b node="-con:year">????</b> HAS</p>
+
+</div>
+
+</body>
+</html>
