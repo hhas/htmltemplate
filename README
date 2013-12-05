@@ -1,4 +1,4 @@
-To install the htmltemplate module from source, cd to the htmltemplate-0.4.0 directory and run:
+To install the htmltemplate module from source, cd to the htmltemplate-2.0.0 directory and run:
 
 	python3 setup.py install
 
