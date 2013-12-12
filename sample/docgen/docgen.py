@@ -19,9 +19,9 @@ Requirements:
 Usage:
 	
 	import docgen
-	docgen.renderdocs('/path/to/md-source-dir', '/path/to/html-output-dir')
+	docgen.renderdocs('/path/to/md-source-dir', '/path/to/html-output-dir', 'author', 'title', 'indextitle')
 	
-	python3  /path/to/docgen.py  /path/to/md-source-dir  /path/to/html-output-dir
+	python3  /path/to/docgen.py  /path/to/md-source-dir  /path/to/html-output-dir  author  title  indextitle
 
 """
 
@@ -63,10 +63,10 @@ def page_navlink(node, link):
 	else:
 		node.omit()
 
-def render_page(node, title, heading, content, navlinks):
+def render_page(node, doctitle, pagetitle, heading, content, navlinks, author):
 	# set title, h1 and main body content
-	node.title1.text, node.title2.text = title.lower(), heading
-	node.content.html = content
+	node.doctitle.text, node.pagetitle1.text = doctitle.lower(), pagetitle.lower()
+	node.pagetitle2.text, node.content.html = heading, content
 	# render the top and bottom navigation bars, or remove them if not needed
 	if navlinks:
 		# render top navbar
@@ -77,7 +77,7 @@ def render_page(node, title, heading, content, navlinks):
 	else:
 		node.topnav.omit()
 		node.bottomnav.omit()
-	node.year.text = time.strftime('%Y')
+	node.year.text, node.author.text = time.strftime('%Y'), author
 
 
 ##
@@ -97,7 +97,7 @@ def render_toc(node, pageinfos):
 #################################################
 
 
-def renderdocs(sourcedir, docdir):
+def renderdocs(sourcedir, docdir, doctitle, indextitle, author):
 	# create root folder and copy static files
 	if os.path.exists(docdir):
 		shutil.rmtree(docdir)
@@ -116,16 +116,18 @@ def renderdocs(sourcedir, docdir):
 					title.strip(' #'), # title
 					markdown(content.strip()) # content
 			))
+	if len(pageinfos) < 2:
+		raise RuntimeError('No source documents found.')
 	pageinfos.sort(key=lambda o: o[0])
 	for i in range(1, len(pageinfos)):
 		_, fname, title, content = pageinfos[i]
 		navlinks = [('Prev', pageinfos[i-1][1]), ('TOC', 'index.html')]
 		if i+1 < len(pageinfos):
 			navlinks.append(('Next', pageinfos[i+1][1]))
-		writefile(docdir, fname, kPageTemplate.render(render_page, title, title, content, navlinks))
-	toc = kIndexTemplate.render(render_toc, pageinfos[1:])
-	writefile(docdir, 'index.html', kPageTemplate.render(render_page, 
-					'TOC', 'htmltemplate documentation', toc, [('Next', pageinfos[1][1])]))
+		writefile(docdir, fname, kPageTemplate.render(render_page, doctitle, title, title, content, navlinks, author))
+	contentlist = kIndexTemplate.render(render_toc, pageinfos[1:])
+	writefile(docdir, 'index.html', kPageTemplate.render(render_page,
+			doctitle, 'TOC', '{} {}'.format(doctitle, indextitle), contentlist, [('Next', pageinfos[1][1])], author))
 
 
 #################################################
@@ -134,5 +136,5 @@ def renderdocs(sourcedir, docdir):
 
 
 if __name__ == '__main__':
-	renderdocs(os.path.expanduser(sys.argv[1]), os.path.expanduser(sys.argv[2]))
+	renderdocs(os.path.expanduser(sys.argv[1]), os.path.expanduser(sys.argv[2]), *sys.argv[3:])
 

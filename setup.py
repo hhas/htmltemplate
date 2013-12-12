@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(name = 'htmltemplate',
-	version = '2.0.0',
+	version = '2.1.0',
 	description = 'A simple, powerful [X]HTML templating library for Python 3',
 	long_description = "htmltemplate converts [X]HTML documents into simple template object models easily manipulated using ordinary Python code. It is powerful, flexible, and easy to use.",
 	author = 'HAS',

@@ -1,6 +1,7 @@
-To install the htmltemplate module from source, cd to the htmltemplate-2.0.0 directory and run:
+To install the htmltemplate module from source, cd to the htmltemplate-2.1.0 directory and run:
 
 	python3 setup.py install
 
-Also see the 'doc' directory for full manual and tutorials, and the 'sample' directory for examples of use.
+See the source distribution's 'doc' directory for the full manual, including tutorials, and the 'sample' directory for examples of use.
 
+htmltemplate 2.x supports Python 3.1 and later. (Python 2 users can install the legacy HTMLTemplate-1.5.0 module as follows: `easy_install htmltemplate==1.5.0`)
