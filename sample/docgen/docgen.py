@@ -19,7 +19,7 @@ Requirements:
 Usage:
 	
 	import docgen
-	docgen.renderdocs('/path/to/md-source-dir', '/path/to/html-output-dir', 'author', 'title', 'indextitle')
+	docgen.renderdocs('/path/to/md-source-dir', '/path/to/html-output-dir', 'author', 'title', 'indextitle', fromyear)
 	
 	python3  /path/to/docgen.py  /path/to/md-source-dir  /path/to/html-output-dir  author  title  indextitle
 
@@ -63,7 +63,7 @@ def page_navlink(node, link):
 	else:
 		node.omit()
 
-def render_page(node, doctitle, pagetitle, heading, content, navlinks, author):
+def render_page(node, doctitle, pagetitle, heading, content, navlinks, author, fromyear):
 	# set title, h1 and main body content
 	node.doctitle.text, node.pagetitle1.text = doctitle.lower(), pagetitle.lower()
 	node.pagetitle2.text, node.content.html = heading, content
@@ -77,7 +77,10 @@ def render_page(node, doctitle, pagetitle, heading, content, navlinks, author):
 	else:
 		node.topnav.omit()
 		node.bottomnav.omit()
-	node.year.text, node.author.text = time.strftime('%Y'), author
+	year = time.localtime().tm_year
+	if fromyear and int(fromyear) < year:
+		year = '{}-{}'.format(int(fromyear), year)
+	node.year.text, node.author.text = year, author
 
 
 ##
@@ -97,7 +100,7 @@ def render_toc(node, pageinfos):
 #################################################
 
 
-def renderdocs(sourcedir, docdir, doctitle, indextitle, author):
+def renderdocs(sourcedir, docdir, doctitle, indextitle, author, fromyear=None):
 	# create root folder and copy static files
 	if os.path.exists(docdir):
 		shutil.rmtree(docdir)
@@ -124,10 +127,11 @@ def renderdocs(sourcedir, docdir, doctitle, indextitle, author):
 		navlinks = [('Prev', pageinfos[i-1][1]), ('TOC', 'index.html')]
 		if i+1 < len(pageinfos):
 			navlinks.append(('Next', pageinfos[i+1][1]))
-		writefile(docdir, fname, kPageTemplate.render(render_page, doctitle, title, title, content, navlinks, author))
+		writefile(docdir, fname, 
+				kPageTemplate.render(render_page, doctitle, title, title, content, navlinks, author, fromyear))
 	contentlist = kIndexTemplate.render(render_toc, pageinfos[1:])
-	writefile(docdir, 'index.html', kPageTemplate.render(render_page,
-			doctitle, 'TOC', '{} {}'.format(doctitle, indextitle), contentlist, [('Next', pageinfos[1][1])], author))
+	writefile(docdir, 'index.html', kPageTemplate.render(render_page, doctitle, 
+			'TOC', '{} {}'.format(doctitle, indextitle), contentlist, [('Next', pageinfos[1][1])], author, fromyear))
 
 
 #################################################
