@@ -102,6 +102,9 @@ If given, the `render` method will pass a _copy_ of the node to the function to 
 
 	Repeater(Container) -- A mutable, repeatable HTML element ('rep')
     
+    	separator : str -- the separator string that will appear between 
+    	                   repeated items (see also 'sep' nodes)
+    	
         __len__() -- the number of times this node has already been repeated
                      (omitted instances are ignored)
             Result : int

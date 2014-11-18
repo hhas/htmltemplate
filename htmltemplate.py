@@ -82,7 +82,7 @@ class Parser(html.parser.HTMLParser):
 	
 	# List of words already used as property and method names, so cannot be used as template node names as well:
 	__invalidnodenames = set(keyword.kwlist).union({'nodetype', 'nodename', 
-			'text', 'html', 'atts', 'omittags', 'omit', 'add', 'repeat', 'copy', 'render', 'structure'})
+			'text', 'html', 'atts', 'omittags', 'omit', 'add', 'repeat', 'copy', 'render', 'structure', 'separator'})
 	
 	##
 	
@@ -342,6 +342,9 @@ class Repeater(Container):
 	"""
 	
 	_nodetype = 'rep'
+	
+	def _setsep(self, s): self._sep = str(s)
+	separator = property(lambda self: self._sep, _setsep)
 	
 	def __init__(self, nodename, tagname, atts, emptytagformat, encode):
 		self._sep = '\n'
