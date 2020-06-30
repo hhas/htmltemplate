@@ -17,11 +17,11 @@ htmltemplate supports Python 3.1 and later.
 
 ## Installing via `pip` ##
 
-To download and install htmltemplate using [`pip`](https://pypi.python.org/pypi/pip):
+To download and install htmltemplate using [pip](https://pypi.python.org/pypi/pip):
 
-	sudo pip-3.3 install htmltemplate
+	sudo pip3 install htmltemplate
 
- This will download the latest version of htmltemplate from the Python Package Index and install it. (Amend the Python version number as needed.)
+ This will download the latest version of htmltemplate from the Python Package Index and install it.
 
 Full documentation and example scripts can be found in the source release – see below.
 

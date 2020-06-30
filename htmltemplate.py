@@ -1,6 +1,6 @@
 """ htmltemplate -- A simple, powerful HTML templating system for Python 3.
 
-Copyright (C) 2007-2016 HAS
+Copyright (C) 2007-2020 HAS
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -9,6 +9,26 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
+
+# TO DO: from usability POV, it'd probably be better to treat sibling nodes with identical names as a single group node whose tags are all rendered using the same content; and require the use of 'del' directives to eliminate cosmetic placeholders
+
+# TO DO: there is a Python gotcha when grafting nodes, e.g.:
+#
+#		subnode = node.subnode = sometemplate.somenode
+#      subnode.repeat(...)
+#
+# The RH assignment doesn't return the value of node.subnode, which is actually a copy of somenode (RichContent.__setattr__ automatically copies on assignment to prevent the original being modified), but here the code also binds the original to a local var for 'convenience', so ends up modifying the original instead of the copy now bound to node; the result is that the new content is added to the original node so does not appear in the rendered output, but will appear in all future renderings (with additional copies of the data appended to the original somenode each time the above code runs, as `repeat` is additive, leading to many accidental duplications appearing in the rendered result). There isn't a way around this (even if Python assignment operations were standard right-associative operator expressions, which they're not, the RH assignment would still return the original somenode unless __setattr__ was able to return its own result for subsequent assignments to use, which Python doesn't support). Probably the only solution is to add a note to documentation so unwary users know not to fall into this gotcha, i.e. use:
+#
+#		node.subnode = sometemplate.somenode
+#		node.subnode.repeat(...)
+#
+# or:
+#
+#		node.subnode = sometemplate.somenode
+#		subnode = node.subnode
+#      subnode.repeat(...)
+#
+
 
 import html.parser, keyword, re
 
