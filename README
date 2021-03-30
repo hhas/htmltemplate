@@ -2,7 +2,7 @@ htmltemplate
 
 A simple, powerful [X]HTML templating library for Python 3.
 
-To install the htmltemplate module from source, cd to the htmltemplate-2.2.0 directory and run:
+To install the htmltemplate module from source, cd to the htmltemplate-2.2.1 directory and run:
 
 	python3 setup.py install
 
